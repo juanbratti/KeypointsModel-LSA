@@ -3,7 +3,7 @@
 Repositorio para entrenamiento y evaluación de modelos de traducción de lenguaje de señas usando keypoints. El modelo utiliza una arquitectura Transformer para traducir secuencias de keypoints a texto.
 
 ## Requisitos
-- Archivo `keypoints_cleaned.h5` en el directorio raíz del proyecto
+- Archivo `keypoints_cleaned.h5` en el directorio raíz del proyecto (correr clean_keypoints.py con el archivo keypoints.h5 en el directorio raíz)
 - Archivo `meta.csv` en el directorio raíz del proyecto
 
 ## Instalación
