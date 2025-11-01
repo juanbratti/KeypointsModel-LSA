@@ -2,6 +2,8 @@
 
 Repositorio para entrenamiento y evaluación de modelos de traducción de lenguaje de señas usando keypoints. El modelo utiliza una arquitectura Transformer para traducir secuencias de keypoints a texto.
 
+Link donde está el archivo keypoints.h5 y el dataset LSA-T: https://github.com/midusi/LSA-T
+
 ## Requisitos
 - Archivo `keypoints_cleaned.h5` en el directorio raíz del proyecto (correr clean_keypoints.py con el archivo keypoints.h5 en el directorio raíz)
 - Archivo `meta.csv` en el directorio raíz del proyecto
