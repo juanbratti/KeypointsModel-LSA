@@ -1,0 +1,93 @@
+model:
+  name: "SignLanguageTranslator"
+
+  # keypoint configuration
+  num_keypoints: 543
+  keypoint_dim: 1086  # 543 keypoints × 2 coordinates (x, y only)
+  
+  # transformer configuration
+  d_model: 256        # Model dimension
+  encoder_layers: 2   # Number of encoder layers
+  decoder_layers: 6   # Number of decoder layers
+  num_heads: 8        # Number of attention heads
+  d_ff: 1024         # Feed-forward dimension (4 * d_model)
+  dropout: 0.2       # Dropout probability
+  
+  # sequence configuration
+  max_seq_length: 5005
+  vocab_size: 15000   # Use full vocabulary (~14k words)
+
+# data configuration
+data:
+  dataset_name: "LSA-T"
+  hdf5_path: "keypoints_cleaned.h5"
+  csv_path: "meta.csv"
+  batch_size: 2  # Further reduced for very long sequences (up to 1242 frames)
+  num_workers: 4
+  normalize: true
+
+  # preprocessing
+  drop_z_coordinate: true
+  drop_visibility: true
+  padding_value: 0.0
+
+# training configuration
+training:
+  num_epochs: 100
+  learning_rate: 3e-5 
+  weight_decay: 0.01
+  grad_clip: 0.5       # More aggressive gradient clipping
+  label_smoothing: 0.1
+  
+  # early stopping
+  patience: 15        # Longer patience for larger dataset
+  save_every: 5
+  log_interval: 100
+
+# optimization
+optimizer:
+  type: "AdamW"
+  learning_rate: 3e-5  # Match training learning rate
+  weight_decay: 0.01
+  betas: [0.9, 0.98]
+  eps: 1e-9
+
+scheduler:
+  type: "cosine"     
+  T_max: 100
+
+# Generation Configuration
+generation:
+  method: "beam_search"          # "greedy" o "beam_search"
+  max_length: 60     
+  beam_size: 5     
+  length_penalty: 1.0      
+  early_stopping: true
+
+# paths
+paths:
+  data_dir: "./" 
+  model_dir: "models/lsa_t/"
+  checkpoint_dir: "checkpoints/lsa_t/"
+  results_dir: "results/lsa_t/"
+  vocab_path: "lsa_vocabulary.json" 
+
+# hardware
+hardware:
+  device: "cuda" 
+  mixed_precision: true
+  compile_model: false
+  gradient_checkpointing: true
+
+# logging
+logging:
+  log_level: "INFO"
+  log_file: "lsa_t_training.log"
+  tensorboard: true
+  wandb: true
+  experiment_name: "lsa_t_sign_translation"
+
+# evaluation
+evaluation:
+  metrics: ["bleu", "accuracy"]
+  bleu_weights: [[1.0], [0.5, 0.5], [0.33, 0.33, 0.33], [0.25, 0.25, 0.25, 0.25]]
